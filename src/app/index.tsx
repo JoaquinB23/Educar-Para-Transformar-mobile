@@ -5,48 +5,55 @@ import { isConfigComplete, missingEnvKeys } from "@/core/config/env";
 import { usePushToken } from "@/features/notificaciones/hooks/usePushToken";
 
 export default function SetupScreen() {
-  const { token, error, loading, requestToken } = usePushToken();
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.eyebrow}>Fase A · Development build</Text>
         <Text style={styles.title}>Educar para Transformar</Text>
-
-        {isConfigComplete ? (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Token FCM del dispositivo</Text>
-            <Text selectable style={styles.token}>
-              {loading ? "Obteniendo token…" : (token ?? "No disponible")}
-            </Text>
-
-            {error ? <Text style={styles.error}>{error}</Text> : null}
-
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Volver a obtener el token de notificaciones"
-              disabled={loading}
-              onPress={() => void requestToken()}
-              style={({ pressed }) => [styles.button, (pressed || loading) && styles.buttonPressed]}
-            >
-              <Text style={styles.buttonText}>Volver a obtener token</Text>
-            </Pressable>
-          </View>
-        ) : (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle}>Falta configurar el archivo .env</Text>
-            <Text style={styles.paragraph}>
-              Completá estas claves en la raíz del proyecto y reiniciá Expo con la caché limpia:
-            </Text>
-            {missingEnvKeys.map((key) => (
-              <Text key={key} style={styles.missingKey}>
-                · {key}
-              </Text>
-            ))}
-          </View>
-        )}
+        {isConfigComplete ? <PushTokenCard /> : <MissingConfigCard />}
       </ScrollView>
     </SafeAreaView>
+  );
+}
+
+function PushTokenCard() {
+  const { token, error, loading, requestToken } = usePushToken();
+
+  return (
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>Token FCM del dispositivo</Text>
+      <Text selectable style={styles.token}>
+        {loading ? "Obteniendo token…" : (token ?? "No disponible")}
+      </Text>
+
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Volver a obtener el token de notificaciones"
+        disabled={loading}
+        onPress={() => void requestToken()}
+        style={({ pressed }) => [styles.button, (pressed || loading) && styles.buttonPressed]}
+      >
+        <Text style={styles.buttonText}>Volver a obtener token</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+function MissingConfigCard() {
+  return (
+    <View style={styles.card}>
+      <Text style={styles.cardTitle}>Falta configurar el archivo .env</Text>
+      <Text style={styles.paragraph}>
+        Completá estas claves en la raíz del proyecto y reiniciá Expo con la caché limpia:
+      </Text>
+      {missingEnvKeys.map((key) => (
+        <Text key={key} style={styles.missingKey}>
+          · {key}
+        </Text>
+      ))}
+    </View>
   );
 }
 
