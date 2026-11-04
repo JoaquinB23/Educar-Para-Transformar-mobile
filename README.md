@@ -1,21 +1,21 @@
 # Educar para Transformar — App móvil
 
 Cliente móvil Android (React Native + Expo) del Sistema de Gestión del Centro
-Educativo "Transformar para Educar". Consume la API del sistema web; no duplica
-reglas de negocio ni accede directo a Firestore.
+Educativo "Transformar para Educar". Consume la API del sistema web; no accede
+directo a Firestore ni duplica reglas de negocio.
 
 ## Requisitos
 
 - Node.js 20 o superior y npm
-- Cuenta de Expo y EAS CLI (`npm install -g eas-cli`)
-- Celular Android real con el development build instalado
+- Cuenta de Expo y EAS CLI
+- Celular Android real
 - Backend del sistema web corriendo en la red local
 
 ## Configuración
 
 1. Copiar `.env.example` a `.env` y completar las variables.
-2. Descargar `google-services.json` desde Firebase Console (app Android con el
-   package `com.transformarparaeducar.app`) y guardarlo en la raíz.
+2. Descargar `google-services.json` desde Firebase Console para la app Android
+   con package `com.educar.app` y guardarlo en la raíz.
 3. Instalar dependencias:
 
    ```bash
@@ -25,37 +25,32 @@ reglas de negocio ni accede directo a Firestore.
 ## Desarrollo
 
 ```bash
-npm start
-```
-
-Para un development build local con HTTP plano:
-
-```bash
-EAS_BUILD_PROFILE=development npx expo run:android
+npx expo start
 ```
 
 ## Build de desarrollo con EAS
 
 ```bash
 eas login
+eas init
 eas build --profile development --platform android
 ```
 
-El perfil `development` genera un APK con `usesCleartextTraffic` habilitado para
-poder consumir el backend por HTTP en la red local.
+## Backend
+
+`EXPO_PUBLIC_API_URL` no puede ser `localhost` desde el celular. Usar la IP
+local de la PC (por ejemplo `http://192.168.X.X:3000`) o una URL HTTPS de túnel.
+El celular y la PC deben estar en la misma red; el Firewall de Windows puede
+bloquear el puerto 3000.
 
 ## Estructura
 
 ```text
 src/
   app/            rutas de expo-router
-  core/           configuración, Firebase, cliente HTTP
-  features/
-    acceso/       login y sesión
-    docentes/     materias, cursos y asistencia
-    notificaciones/  push y avisos
+  core/config/    variables de entorno y Firebase
+  core/api/       cliente HTTP
+  features/       acceso, docentes, notificaciones, alumnos, salud
 ```
 
-## Documentación de la API
-
-Ver `docs/API-MOVIL.md` (se completa en las fases siguientes).
+La documentación de endpoints de la app se completa en las fases siguientes.

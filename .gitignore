@@ -6,45 +6,15 @@ node_modules/
 .env.*
 !.env.example
 
-# Credenciales de Firebase descargadas de la consola
-google-services.json
-GoogleService-Info.plist
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md
 
-# Proyectos nativos generados por prebuild
-/android
-/ios
-
-# Expo
+node_modules/
 .expo/
 dist/
-expo-env.d.ts
 web-build/
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
 
-# Builds
-*.apk
-*.aab
-*.ipa
-
-# Tests y cobertura
-coverage/
-
-# Editores y sistema operativo
-.DS_Store
-Thumbs.db
-.idea/
-.vscode/
-
-# Logs
-*.log
-npm-debug.*
-yarn-debug.*
-yarn-error.*
-
-# Ignore vscode AI rules
-.github/instructions/codacy.instructions.md
+.env
+.env.*
+!.env.example
+google-services.json

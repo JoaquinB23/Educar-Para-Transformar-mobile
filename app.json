@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "educar-app",
+    "slug": "educar-app",
+    "scheme": "educarapp",
+    "plugins": ["expo-router", "expo-notifications"],
+    "android": {
+      "package": "com.educar.app",
+      "googleServicesFile": "./google-services.json"
+    }
+  }
+}
