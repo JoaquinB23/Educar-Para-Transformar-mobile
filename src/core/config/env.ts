@@ -24,4 +24,5 @@ export const env = {
     'EXPO_PUBLIC_FIREBASE_APP_ID',
     process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
   ),
+  mockRol: process.env.EXPO_PUBLIC_MOCK_ROL,
 };
