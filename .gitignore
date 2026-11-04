@@ -1,4 +1,50 @@
+# Dependencias
+node_modules/
 
+# Variables de entorno (solo .env.example se versiona)
+.env
+.env.*
+!.env.example
 
-#Ignore vscode AI rules
-.github\instructions\codacy.instructions.md
+# Credenciales de Firebase descargadas de la consola
+google-services.json
+GoogleService-Info.plist
+
+# Proyectos nativos generados por prebuild
+/android
+/ios
+
+# Expo
+.expo/
+dist/
+expo-env.d.ts
+web-build/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Builds
+*.apk
+*.aab
+*.ipa
+
+# Tests y cobertura
+coverage/
+
+# Editores y sistema operativo
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Logs
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
