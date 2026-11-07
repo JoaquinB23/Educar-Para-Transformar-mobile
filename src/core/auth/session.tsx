@@ -12,6 +12,8 @@ import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebas
 
 import { setUnauthorizedHandler } from '../api/client';
 import { auth } from '../config/firebase';
+import { eliminarPushToken } from '../../features/notificaciones/repositories/notificaciones.repository';
+import { getCurrentPushToken } from '../../features/notificaciones/services/pushNotifications';
 
 import { traducirErrorAuth } from './errors';
 import { obtenerPerfil } from './perfil.repository';
@@ -147,7 +149,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const cerrarSesion = useCallback(async () => {
-    // TODO push: revocar token del dispositivo
+    // Best-effort: si falla la red, el token ya no existe o no hay permisos,
+    // igual cerramos la sesión de Firebase.
+    try {
+      const token = await getCurrentPushToken();
+      if (token) {
+        await eliminarPushToken(token);
+      }
+    } catch (error) {
+      if (__DEV__) {
+        console.warn('[push] No se pudo revocar el token al cerrar sesión:', error);
+      }
+    }
+
     try {
       await signOut(auth);
       setSession({ status: 'anonimo', perfil: null, error: null });

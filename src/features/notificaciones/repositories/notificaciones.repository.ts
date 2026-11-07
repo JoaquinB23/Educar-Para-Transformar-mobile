@@ -35,3 +35,23 @@ export async function marcarLeida(
   });
   return response.data;
 }
+
+export async function registrarPushToken(
+  token: string,
+  plataforma: 'android' | 'ios' = 'android',
+): Promise<void> {
+  if (__DEV__ && process.env.EXPO_PUBLIC_MOCK_DATA === 'true') {
+    return;
+  }
+
+  await api.post(ENDPOINTS_NOTIFICACIONES.registrarToken, { token, plataforma });
+}
+
+export async function eliminarPushToken(token: string): Promise<void> {
+  if (__DEV__ && process.env.EXPO_PUBLIC_MOCK_DATA === 'true') {
+    return;
+  }
+
+  // El backend recibe el token en el body del DELETE, no en la query.
+  await api.delete(ENDPOINTS_NOTIFICACIONES.eliminarToken, { data: { token } });
+}

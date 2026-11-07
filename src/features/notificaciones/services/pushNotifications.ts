@@ -54,3 +54,16 @@ export async function registerForPushNotifications(): Promise<string | null> {
     throw new Error(`No se pudo obtener el token FCM. Verificá google-services.json.${hint} Detalle: ${detail}`);
   }
 }
+
+// Lectura silenciosa para el cierre de sesión: si no hay permiso o el token
+// no está disponible, devuelve null sin interrumpir el signOut.
+export async function getCurrentPushToken(): Promise<string | null> {
+  if (Platform.OS !== 'android') return null;
+
+  try {
+    const token = await Notifications.getDevicePushTokenAsync();
+    return String(token.data);
+  } catch {
+    return null;
+  }
+}
