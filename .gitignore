@@ -12,5 +12,9 @@ google-services.json
 dist/
 web-build/
 
+# Proyecto nativo generado por prebuild (Continuous Native Generation)
+/android/
+/ios/
+
 #Ignore vscode AI rules
 .github\instructions\codacy.instructions.md
