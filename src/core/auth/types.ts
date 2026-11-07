@@ -1,3 +1,5 @@
+import { ApiError } from '../api/errors';
+
 export const ROLES = {
   PADRE: 'padre',
   ALUMNO: 'alumno',
@@ -6,9 +8,18 @@ export const ROLES = {
 
 export type Rol = (typeof ROLES)[keyof typeof ROLES];
 
-export interface Hijo {
-  id: string;
-  nombre: string;
+export function rolDesdeBackend(rol: string): Rol {
+  switch (rol) {
+    case 'familia':
+      return ROLES.PADRE;
+    case 'alumno':
+      return ROLES.ALUMNO;
+    case 'docente':
+      // TODO confirmar que este es el rol de docentes en el backend.
+      return ROLES.PROFESOR;
+    default:
+      throw new ApiError(403, 'Tu usuario no tiene acceso a la app móvil', 'unsupported-role');
+  }
 }
 
 export interface Perfil {
@@ -16,5 +27,6 @@ export interface Perfil {
   nombre: string;
   email: string;
   rol: Rol;
-  hijos?: Hijo[];
+  alumnoId?: string;
+  hijoIds: string[];
 }
