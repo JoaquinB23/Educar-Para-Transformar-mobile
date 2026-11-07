@@ -31,10 +31,6 @@ export async function registerForPushNotifications(): Promise<string | null> {
 
   await ensureDefaultChannel();
 
-  if (!Device.isDevice) {
-    throw new Error('Las notificaciones push requieren un dispositivo o emulador con Google Play.');
-  }
-
   const currentPermission = await Notifications.getPermissionsAsync();
   let status = currentPermission.status;
 
@@ -46,6 +42,15 @@ export async function registerForPushNotifications(): Promise<string | null> {
     throw new Error('No se otorgó el permiso de notificaciones.');
   }
 
-  const token = await Notifications.getDevicePushTokenAsync();
-  return String(token.data);
+  try {
+    const token = await Notifications.getDevicePushTokenAsync();
+    return String(token.data);
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    const hint = Device.isDevice
+      ? ''
+      : ' El emulador o la máquina virtual necesita una imagen con Google Play services.';
+
+    throw new Error(`No se pudo obtener el token FCM. Verificá google-services.json.${hint} Detalle: ${detail}`);
+  }
 }
