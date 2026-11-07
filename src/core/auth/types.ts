@@ -15,7 +15,6 @@ export function rolDesdeBackend(rol: string): Rol {
     case 'alumno':
       return ROLES.ALUMNO;
     case 'docente':
-      // TODO confirmar que este es el rol de docentes en el backend.
       return ROLES.PROFESOR;
     default:
       throw new ApiError(403, 'Tu usuario no tiene acceso a la app móvil', 'unsupported-role');
