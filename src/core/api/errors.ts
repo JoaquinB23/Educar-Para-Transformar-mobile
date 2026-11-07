@@ -20,12 +20,12 @@ function responseMessage(data: unknown): string | undefined {
     return undefined;
   }
 
-  if (typeof data.message === 'string' && data.message.trim()) {
-    return data.message;
-  }
-
   if (typeof data.error === 'string' && data.error.trim()) {
     return data.error;
+  }
+
+  if (typeof data.message === 'string' && data.message.trim()) {
+    return data.message;
   }
 
   return undefined;

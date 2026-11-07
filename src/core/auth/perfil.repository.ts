@@ -1,7 +1,7 @@
 import { api } from '../api/client';
 import { env } from '../config/env';
 
-import { ROLES, type Perfil, type Rol } from './types';
+import { rolDesdeBackend, ROLES, type Perfil, type Rol } from './types';
 
 function esRol(value: string): value is Rol {
   return Object.values(ROLES).some((rol) => rol === value);
@@ -18,16 +18,30 @@ function crearPerfilDePrueba(rol: Rol): Perfil {
           : 'Profesor de prueba',
     email: `${rol}@example.test`,
     rol,
+    hijoIds: [],
   };
 
   if (rol === ROLES.PADRE) {
-    perfil.hijos = [
-      { id: 'mock-hijo-1', nombre: 'Hijo de prueba 1' },
-      { id: 'mock-hijo-2', nombre: 'Hijo de prueba 2' },
-    ];
+    perfil.hijoIds = ['mock-hijo-1', 'mock-hijo-2'];
+  } else if (rol === ROLES.ALUMNO) {
+    perfil.alumnoId = 'mock-alumno-1';
   }
 
   return perfil;
+}
+
+interface PerfilBackend {
+  uid: string;
+  email: string;
+  dni: string;
+  rol: string;
+  nivel: string | null;
+  nombre: string;
+  apellido: string;
+  hijoPrimariaId?: string | null;
+  hijoSecundariaId?: string | null;
+  alumnoId?: string | null;
+  cicloLectivoActual: number;
 }
 
 export async function obtenerPerfil(): Promise<Perfil> {
@@ -39,6 +53,17 @@ export async function obtenerPerfil(): Promise<Perfil> {
     return crearPerfilDePrueba(env.mockRol);
   }
 
-  const response = await api.get<Perfil>('/me');
-  return response.data;
+  const response = await api.get<PerfilBackend>('/auth/me');
+  const backendPerfil = response.data;
+
+  return {
+    id: backendPerfil.uid,
+    nombre: `${backendPerfil.nombre} ${backendPerfil.apellido}`.trim(),
+    email: backendPerfil.email,
+    rol: rolDesdeBackend(backendPerfil.rol),
+    alumnoId: backendPerfil.alumnoId || undefined,
+    hijoIds: [backendPerfil.hijoPrimariaId, backendPerfil.hijoSecundariaId].filter(
+      (id): id is string => typeof id === 'string' && id.length > 0,
+    ),
+  };
 }

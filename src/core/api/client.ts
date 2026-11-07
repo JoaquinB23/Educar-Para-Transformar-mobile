@@ -16,6 +16,10 @@ export const api = create({
   timeout: 15_000,
 });
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
 let unauthorizedHandler: (() => void) | undefined;
 
 export function setUnauthorizedHandler(handler: (() => void) | null): void {
@@ -37,7 +41,13 @@ api.interceptors.request.use(async (config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    if (isRecord(response.data) && response.data.ok === true && 'data' in response.data) {
+      response.data = response.data.data;
+    }
+
+    return response;
+  },
   async (error: unknown) => {
     if (!isAxiosError(error)) {
       throw normalizarError(error);
