@@ -7,6 +7,7 @@ import type { Atencion } from '../types';
 
 interface ItemAtencionProps {
   atencion: Atencion;
+  expandidaInicial?: boolean;
 }
 
 function valorOInformado(value: string | null | undefined): string {
@@ -22,8 +23,8 @@ function Detalle({ etiqueta, valor }: { etiqueta: string; valor: string }) {
   );
 }
 
-export function ItemAtencion({ atencion }: ItemAtencionProps) {
-  const [expandida, setExpandida] = useState(false);
+export function ItemAtencion({ atencion, expandidaInicial = false }: ItemAtencionProps) {
+  const [expandida, setExpandida] = useState(expandidaInicial);
 
   return (
     <View style={styles.contenedor}>
