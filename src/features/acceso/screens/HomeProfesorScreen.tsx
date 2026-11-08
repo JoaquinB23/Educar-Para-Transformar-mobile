@@ -8,7 +8,6 @@ const ACCESOS: AccesoHome[] = [
     titulo: 'Materias',
     descripcion: 'Materias y cursos a cargo.',
     ruta: RUTAS.materias,
-    pendiente: true,
   },
   {
     titulo: 'Asistencia',
