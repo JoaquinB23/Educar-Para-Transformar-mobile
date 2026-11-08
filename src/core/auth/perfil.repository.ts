@@ -1,5 +1,6 @@
 import { api } from '../api/client';
 import { env } from '../config/env';
+import { nombreCompleto } from '../utils/nombre';
 
 import { rolDesdeBackend, ROLES, type Perfil, type Rol } from './types';
 
@@ -36,7 +37,7 @@ interface PerfilBackend {
   rol: string;
   nivel: string | null;
   nombre: string;
-  apellido: string;
+  apellido?: string | null;
   hijoPrimariaId?: string | null;
   hijoSecundariaId?: string | null;
   alumnoId?: string | null;
@@ -57,7 +58,7 @@ export async function obtenerPerfil(): Promise<Perfil> {
 
   return {
     id: backendPerfil.uid,
-    nombre: `${backendPerfil.nombre} ${backendPerfil.apellido}`.trim(),
+    nombre: nombreCompleto(backendPerfil.nombre, backendPerfil.apellido),
     email: backendPerfil.email,
     rol: rolDesdeBackend(backendPerfil.rol),
     alumnoId: backendPerfil.alumnoId || undefined,

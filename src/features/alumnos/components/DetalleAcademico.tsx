@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { EstadoVacio } from '../../../core/components/EstadoVacio';
 import { theme } from '../../../core/config/theme';
+import { nombreCompleto } from '../../../core/utils/nombre';
 
 import type { DatosAcademicos } from '../types';
 
@@ -16,7 +17,7 @@ export function DetalleAcademico({ datos }: DetalleAcademicoProps) {
     <View style={styles.contenedor}>
       <View style={styles.seccion}>
         <Text style={styles.titulo}>Datos del alumno</Text>
-        <Text style={styles.dato}>Nombre: {`${alumno.nombre} ${alumno.apellido}`.trim()}</Text>
+        <Text style={styles.dato}>Nombre: {nombreCompleto(alumno.nombre, alumno.apellido)}</Text>
         <Text style={styles.dato}>Legajo: {alumno.legajo}</Text>
         <Text style={styles.dato}>Nivel: {alumno.nivel ?? 'No informado'}</Text>
         <Text style={styles.dato}>Estado: {alumno.estado}</Text>

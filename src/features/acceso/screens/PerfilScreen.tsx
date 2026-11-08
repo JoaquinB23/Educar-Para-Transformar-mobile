@@ -8,6 +8,10 @@ import { theme } from '../../../core/config/theme';
 
 import { useCerrarSesion } from '../hooks/useCerrarSesion';
 
+function capitalizar(texto: string): string {
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+}
+
 export function PerfilScreen() {
   const { perfil } = useSession();
   const { cerrar, enviando, error } = useCerrarSesion();
@@ -21,7 +25,7 @@ export function PerfilScreen() {
   ];
 
   if (perfil.nivel) {
-    filas.push({ etiqueta: 'Nivel', valor: perfil.nivel });
+    filas.push({ etiqueta: 'Nivel', valor: capitalizar(perfil.nivel) });
   }
 
   if (perfil.cicloLectivoActual) {

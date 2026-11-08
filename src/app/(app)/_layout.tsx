@@ -25,6 +25,8 @@ export default function AppLayout() {
           headerShown: false,
           tabBarActiveTintColor: theme.colores.primario,
           tabBarInactiveTintColor: theme.colores.texto,
+          tabBarIcon: () => null,
+          tabBarIconStyle: styles.sinIcono,
           tabBarLabelStyle: styles.etiquetaTab,
           tabBarStyle: styles.barra,
         }}
@@ -70,6 +72,9 @@ const styles = StyleSheet.create({
     height: 58,
     paddingBottom: 8,
     paddingTop: 6,
+  },
+  sinIcono: {
+    display: 'none',
   },
   etiquetaTab: {
     fontSize: 12,

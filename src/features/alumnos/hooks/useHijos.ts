@@ -2,6 +2,7 @@ import { useQueries } from '@tanstack/react-query';
 
 import { useSession } from '../../../core/auth/session';
 import { ROLES } from '../../../core/auth/types';
+import { nombreCompleto } from '../../../core/utils/nombre';
 
 import { obtenerAlumno } from '../repositories/academico.repository';
 import type { Hijo } from '../types';
@@ -25,7 +26,7 @@ export function useHijos() {
       return [];
     }
 
-    return [{ id: hijoIds[index], nombre: `${alumno.nombre} ${alumno.apellido}`.trim() }];
+    return [{ id: hijoIds[index], nombre: nombreCompleto(alumno.nombre, alumno.apellido) }];
   });
 
   return {
