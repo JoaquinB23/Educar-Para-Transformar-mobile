@@ -31,13 +31,31 @@ function responseMessage(data: unknown): string | undefined {
   return undefined;
 }
 
+// En desarrollo mostramos el código y la URL para distinguir un problema de
+// red de Firebase de uno del backend (por ejemplo, API caída o URL mal armada).
+function detalleDev(error: unknown): string {
+  if (!__DEV__ || !isAxiosError(error) || error.response) {
+    return '';
+  }
+
+  const metodo = error.config?.method?.toUpperCase() ?? 'GET';
+  const url = `${error.config?.baseURL ?? ''}${error.config?.url ?? ''}`;
+  const codigo = error.code ?? 'sin código';
+
+  return ` (${codigo}: ${metodo} ${url})`;
+}
+
 export function normalizarError(error: unknown): ApiError {
   if (!isAxiosError(error)) {
     return new ApiError(0, 'No se pudo conectar con el servidor');
   }
 
   if (!error.response) {
-    return new ApiError(0, 'No se pudo conectar con el servidor', error.code);
+    return new ApiError(
+      0,
+      `No se pudo conectar con el servidor${detalleDev(error)}`,
+      error.code,
+    );
   }
 
   const body = error.response.data;
