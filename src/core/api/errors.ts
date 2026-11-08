@@ -31,18 +31,18 @@ function responseMessage(data: unknown): string | undefined {
   return undefined;
 }
 
-// En desarrollo mostramos el código y la URL para distinguir un problema de
-// red de Firebase de uno del backend (por ejemplo, API caída o URL mal armada).
+// En desarrollo mostramos el estado/código y la URL para distinguir un problema
+// de red de uno del backend (por ejemplo, un 404 por una URL mal armada).
 function detalleDev(error: unknown): string {
-  if (!__DEV__ || !isAxiosError(error) || error.response) {
+  if (!__DEV__ || !isAxiosError(error)) {
     return '';
   }
 
   const metodo = error.config?.method?.toUpperCase() ?? 'GET';
   const url = `${error.config?.baseURL ?? ''}${error.config?.url ?? ''}`;
-  const codigo = error.code ?? 'sin código';
+  const estado = error.response ? String(error.response.status) : (error.code ?? 'sin código');
 
-  return ` (${codigo}: ${metodo} ${url})`;
+  return ` (${estado}: ${metodo} ${url})`;
 }
 
 export function normalizarError(error: unknown): ApiError {
@@ -63,7 +63,7 @@ export function normalizarError(error: unknown): ApiError {
 
   return new ApiError(
     error.response.status,
-    responseMessage(body) ?? 'Ocurrió un error al comunicarse con el servidor',
+    `${responseMessage(body) ?? 'Ocurrió un error al comunicarse con el servidor'}${detalleDev(error)}`,
     code,
   );
 }
