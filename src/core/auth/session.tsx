@@ -28,6 +28,9 @@ interface SessionState {
 }
 
 interface SessionContextValue extends SessionState {
+  // false hasta que Firebase resolvió la sesión por primera vez. Sirve para
+  // mostrar el splash de arranque sin parpadear el login.
+  inicializado: boolean;
   iniciarSesion(email: string, password: string): Promise<void>;
   cerrarSesion(): Promise<void>;
 }
@@ -48,6 +51,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     perfil: null,
     error: null,
   });
+  const [inicializado, setInicializado] = useState(false);
   const authRequestId = useRef(0);
   const errorTrasCerrarSesion = useRef<string | null>(null);
 
@@ -80,6 +84,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
           authRequestId.current += 1;
           const error = errorTrasCerrarSesion.current;
           errorTrasCerrarSesion.current = null;
+          setInicializado(true);
           setSession({ status: 'anonimo', perfil: null, error });
           return;
         }
@@ -91,6 +96,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         void obtenerPerfil()
           .then((perfil) => {
             if (requestId === authRequestId.current) {
+              setInicializado(true);
               setSession({ status: 'autenticado', perfil, error: null });
             }
           })
@@ -99,6 +105,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
               return;
             }
 
+            setInicializado(true);
             const message = mensajeDeError(error, 'No se pudo cargar el perfil.');
             errorTrasCerrarSesion.current = message;
 
@@ -122,6 +129,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       () => {
         authRequestId.current += 1;
         errorTrasCerrarSesion.current = null;
+        setInicializado(true);
         setSession({
           status: 'anonimo',
           perfil: null,
@@ -173,8 +181,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   const value = useMemo(
-    () => ({ ...session, iniciarSesion, cerrarSesion }),
-    [session, iniciarSesion, cerrarSesion],
+    () => ({ ...session, inicializado, iniciarSesion, cerrarSesion }),
+    [session, inicializado, iniciarSesion, cerrarSesion],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
