@@ -23,7 +23,7 @@ async function loadPushToken(): Promise<Omit<PushTokenState, 'loading'>> {
     const token = await registerForPushNotifications();
 
     if (__DEV__ && token) {
-      console.log('[push] Token FCM:', token);
+      console.log('[push] Token FCM:', `${token.slice(0, 8)}…`);
     }
 
     return { token, error: null };
