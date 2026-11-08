@@ -2,25 +2,21 @@ import { useCallback, useState } from 'react';
 
 import { useSession } from '../../../core/auth/session';
 
-import { normalizarCorreo } from '../utils/correo';
-
 export function useLoginForm() {
   const { iniciarSesion, error: errorSesion, status } = useSession();
-  const [correo, setCorreo] = useState('');
+  const [dni, setDniState] = useState('');
   const [password, setPassword] = useState('');
   const [errorValidacion, setErrorValidacion] = useState<string | null>(null);
 
   const enviando = status === 'cargando';
 
-  const enviar = useCallback(async () => {
-    if (!correo.trim()) {
-      setErrorValidacion('Ingresá tu correo');
-      return;
-    }
+  const setDni = useCallback((valor: string) => {
+    setDniState(valor.replace(/\D/g, ''));
+  }, []);
 
-    const email = normalizarCorreo(correo);
-    if (!email) {
-      setErrorValidacion('Ingresá un DNI válido');
+  const enviar = useCallback(async () => {
+    if (!dni) {
+      setErrorValidacion('Ingresá tu DNI');
       return;
     }
 
@@ -32,15 +28,15 @@ export function useLoginForm() {
     setErrorValidacion(null);
 
     try {
-      await iniciarSesion(email, password);
+      await iniciarSesion(dni, password);
     } catch {
       // El mensaje ya queda en session.error y lo mostramos en pantalla.
     }
-  }, [correo, password, iniciarSesion]);
+  }, [dni, password, iniciarSesion]);
 
   return {
-    correo,
-    setCorreo,
+    dni,
+    setDni,
     password,
     setPassword,
     enviar,

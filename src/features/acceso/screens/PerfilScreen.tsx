@@ -1,5 +1,6 @@
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 
+import { dniDesdeEmail } from '../../../core/auth/dni';
 import { useSession } from '../../../core/auth/session';
 import { ETIQUETA_ROL } from '../../../core/auth/types';
 import { BotonPrimario } from '../../../core/components/BotonPrimario';
@@ -15,7 +16,7 @@ export function PerfilScreen() {
 
   const filas: { etiqueta: string; valor: string }[] = [
     { etiqueta: 'Nombre', valor: perfil.nombre },
-    { etiqueta: 'Correo', valor: perfil.email },
+    { etiqueta: 'DNI', valor: dniDesdeEmail(perfil.email) },
     { etiqueta: 'Rol', valor: ETIQUETA_ROL[perfil.rol] },
   ];
 

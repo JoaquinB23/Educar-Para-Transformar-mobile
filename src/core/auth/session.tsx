@@ -16,6 +16,7 @@ import { eliminarPushToken } from '../../features/notificaciones/repositories/no
 import { getCurrentPushToken } from '../../features/notificaciones/services/pushNotifications';
 
 import { traducirErrorAuth } from './errors';
+import { dniAEmail } from './dni';
 import { obtenerPerfil } from './perfil.repository';
 import type { Perfil } from './types';
 
@@ -31,7 +32,7 @@ interface SessionContextValue extends SessionState {
   // false hasta que Firebase resolvió la sesión por primera vez. Sirve para
   // mostrar el splash de arranque sin parpadear el login.
   inicializado: boolean;
-  iniciarSesion(email: string, password: string): Promise<void>;
+  iniciarSesion(dni: string, password: string): Promise<void>;
   cerrarSesion(): Promise<void>;
 }
 
@@ -144,8 +145,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
   }, [cerrarSesionPor401]);
 
-  const iniciarSesion = useCallback(async (email: string, password: string) => {
+  const iniciarSesion = useCallback(async (dni: string, password: string) => {
     setSession({ status: 'cargando', perfil: null, error: null });
+
+    // Único punto donde el DNI se convierte al email que espera Firebase.
+    const email = dniAEmail(dni);
+    if (!email) {
+      const message = 'Ingresá un DNI válido';
+      setSession({ status: 'anonimo', perfil: null, error: message });
+      throw new Error(message);
+    }
 
     try {
       await signInWithEmailAndPassword(auth, email, password);

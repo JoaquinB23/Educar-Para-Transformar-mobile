@@ -7,7 +7,7 @@ import { theme } from '../../../core/config/theme';
 import { useLoginForm } from '../hooks/useLoginForm';
 
 export function LoginScreen() {
-  const { correo, setCorreo, password, setPassword, enviar, enviando, error } = useLoginForm();
+  const { dni, setDni, password, setPassword, enviar, enviando, error } = useLoginForm();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -21,22 +21,19 @@ export function LoginScreen() {
         >
           <View style={styles.encabezado}>
             <Text style={styles.titulo}>Educar para Transformar</Text>
-            <Text style={styles.subtitulo}>Ingresá con tu correo institucional</Text>
+            <Text style={styles.subtitulo}>Ingresá con tu DNI</Text>
           </View>
 
           <View style={styles.formulario}>
             <CampoTexto
               autoCapitalize="none"
-              autoComplete="username"
               autoCorrect={false}
-              ayuda="Ingresá tu DNI. El correo se arma automáticamente."
-              keyboardType="email-address"
-              label="Correo"
-              onChangeText={setCorreo}
+              keyboardType="number-pad"
+              label="DNI"
+              onChangeText={setDni}
               placeholder="Ej.: 96906351"
               returnKeyType="next"
-              textContentType="username"
-              value={correo}
+              value={dni}
             />
 
             <CampoTexto
