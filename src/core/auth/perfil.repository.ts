@@ -33,7 +33,6 @@ function crearPerfilDePrueba(rol: Rol): Perfil {
 interface PerfilBackend {
   uid: string;
   email: string;
-  dni: string;
   rol: string;
   nivel: string | null;
   nombre: string;
@@ -65,5 +64,7 @@ export async function obtenerPerfil(): Promise<Perfil> {
     hijoIds: [backendPerfil.hijoPrimariaId, backendPerfil.hijoSecundariaId].filter(
       (id): id is string => typeof id === 'string' && id.length > 0,
     ),
+    nivel: backendPerfil.nivel,
+    cicloLectivoActual: backendPerfil.cicloLectivoActual,
   };
 }

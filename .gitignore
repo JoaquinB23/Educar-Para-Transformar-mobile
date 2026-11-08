@@ -5,16 +5,16 @@ node_modules/
 .env
 .env.*
 !.env.example
+google-services.json
 
-#Ignore vscode AI rules
-.github\instructions\codacy.instructions.md
-
-node_modules/
+# Build y caché
 .expo/
 dist/
 web-build/
 
-.env
-.env.*
-!.env.example
-google-services.json
+# Proyecto nativo generado por prebuild (Continuous Native Generation)
+/android/
+/ios/
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md

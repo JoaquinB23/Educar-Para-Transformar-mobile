@@ -3,7 +3,18 @@
     "name": "educar-app",
     "slug": "educar-app",
     "scheme": "educarapp",
-    "plugins": ["expo-router", "expo-notifications"],
+    "plugins": [
+      "expo-router",
+      "expo-notifications",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ],
     "android": {
       "package": "com.educar.app",
       "googleServicesFile": "./google-services.json"

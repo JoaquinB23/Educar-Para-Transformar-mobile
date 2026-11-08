@@ -28,4 +28,12 @@ export interface Perfil {
   rol: Rol;
   alumnoId?: string;
   hijoIds: string[];
+  nivel?: string | null;
+  cicloLectivoActual?: number;
 }
+
+export const ETIQUETA_ROL: Record<Rol, string> = {
+  [ROLES.PADRE]: 'Familia',
+  [ROLES.ALUMNO]: 'Alumno',
+  [ROLES.PROFESOR]: 'Docente',
+};
