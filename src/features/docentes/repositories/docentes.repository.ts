@@ -1,7 +1,13 @@
 import { api } from '../../../core/api/client';
 
 import { ENDPOINTS_DOCENTES } from './endpoints';
-import type { AlumnoAsignado, MateriaAsignada } from '../types';
+import type {
+  AlumnoAsignado,
+  AsistenciaGuardada,
+  MateriaAsignada,
+  RegistroAsistencia,
+  ResultadoAsistencia,
+} from '../types';
 
 interface MateriaResumenApi {
   id: string;
@@ -70,4 +76,23 @@ export function agruparPorMateria(alumnos: AlumnoAsignadoApi[]): MateriaAsignada
 export async function obtenerAsignaciones(): Promise<MateriaAsignada[]> {
   const response = await api.get<AlumnoAsignadoApi[]>(ENDPOINTS_DOCENTES.asignaciones);
   return agruparPorMateria(response.data);
+}
+
+export async function obtenerAsistencias(
+  materiaId: string,
+  fecha: string,
+): Promise<AsistenciaGuardada[]> {
+  const response = await api.get<AsistenciaGuardada[]>(ENDPOINTS_DOCENTES.asistencias, {
+    params: { materiaId, fecha },
+  });
+  return response.data;
+}
+
+export async function guardarAsistencia(payload: {
+  materiaId: string;
+  fecha: string;
+  registros: RegistroAsistencia[];
+}): Promise<ResultadoAsistencia> {
+  const response = await api.post<ResultadoAsistencia>(ENDPOINTS_DOCENTES.asistencias, payload);
+  return response.data;
 }

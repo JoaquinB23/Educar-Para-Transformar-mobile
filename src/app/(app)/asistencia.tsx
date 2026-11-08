@@ -1,11 +1,11 @@
 import { RequiereRol } from '../../core/auth/RequiereRol';
 import { ROLES } from '../../core/auth/types';
-import { PantallaPendiente } from '../../core/components/PantallaPendiente';
+import { AsistenciaScreen } from '../../features/docentes/screens/AsistenciaScreen';
 
 export default function AsistenciaRoute() {
   return (
     <RequiereRol rol={ROLES.PROFESOR}>
-      <PantallaPendiente titulo="Asistencia" />
+      <AsistenciaScreen />
     </RequiereRol>
   );
 }

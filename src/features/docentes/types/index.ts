@@ -17,3 +17,34 @@ export interface AlumnoAsignado {
 export interface MateriaAsignada extends MateriaResumen {
   alumnos: AlumnoAsignado[];
 }
+
+export type EstadoAsistencia = 'presente' | 'tarde' | 'ausente';
+
+export interface RegistroAsistencia {
+  alumnoId: string;
+  estado: EstadoAsistencia;
+}
+
+export interface AsistenciaGuardada {
+  id: string;
+  alumnoId: string;
+  materiaId: string;
+  fecha: string;
+  estado: EstadoAsistencia;
+}
+
+export interface AsistenciaDescartada {
+  registro: unknown;
+  motivo: string;
+}
+
+export interface AvisosAsistencia {
+  generadas: number;
+  sinTutor: string[];
+}
+
+export interface ResultadoAsistencia {
+  registros: AsistenciaGuardada[];
+  descartados: AsistenciaDescartada[];
+  avisos: AvisosAsistencia;
+}

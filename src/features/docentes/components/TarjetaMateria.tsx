@@ -3,15 +3,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { theme } from '../../../core/config/theme';
 import { nombreCompleto } from '../../../core/utils/nombre';
+import { capitalizar } from '../../../core/utils/texto';
 
 import type { MateriaAsignada } from '../types';
 
 interface TarjetaMateriaProps {
   materia: MateriaAsignada;
-}
-
-function capitalizar(texto: string): string {
-  return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
 export function TarjetaMateria({ materia }: TarjetaMateriaProps) {

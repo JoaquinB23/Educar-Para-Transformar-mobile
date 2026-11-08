@@ -13,7 +13,6 @@ const ACCESOS: AccesoHome[] = [
     titulo: 'Asistencia',
     descripcion: 'Registro de asistencia por curso.',
     ruta: RUTAS.asistencia,
-    pendiente: true,
   },
   {
     titulo: 'Perfil',
