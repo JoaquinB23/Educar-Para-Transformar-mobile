@@ -194,12 +194,25 @@ El perfil consultado para obtener el vínculo tiene esta forma relevante:
     "actualizadoEn": "2025-01-15T12:00:00.000Z",
     "hijoPrimariaId": "hijo-demo-002",
     "hijoSecundariaId": "hijo-demo-001",
+    "hijos": [
+      {
+        "id": "hijo-demo-001",
+        "nombre": "Mateo",
+        "apellido": "Pérez",
+        "nivel": "secundaria",
+        "legajo": "AL-2087"
+      }
+    ],
     "cicloLectivoActual": 2025
   }
 }
 ```
 
-La respuesta real de perfil puede incluir solo uno de los dos IDs de hijo. `GET /api/alumnos` no es una lista para padres: exige rol `admin`.
+Para el rol `familia`, `GET /api/auth/me` agrega `hijos` con los datos
+básicos de los alumnos vinculados: `id`, `nombre`, `apellido`, `nivel` y
+`legajo`. Los campos `hijoPrimariaId` y `hijoSecundariaId` se mantienen sin
+cambios. La respuesta real de perfil puede incluir sólo uno de los dos IDs de
+hijo. `GET /api/alumnos` no es una lista para padres: exige rol `admin`.
 
 ## Campos pedidos que no forman parte de un contrato existente
 
