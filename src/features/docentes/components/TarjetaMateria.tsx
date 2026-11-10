@@ -40,16 +40,22 @@ export function TarjetaMateria({ materia }: TarjetaMateriaProps) {
 
       {expandida ? (
         <View style={styles.alumnos}>
-          {materia.alumnos.map((alumno) => (
-            <View key={alumno.id} style={styles.filaAlumno}>
-              <Text style={styles.nombreAlumno}>
-                {nombreCompleto(alumno.nombre, alumno.apellido)}
-              </Text>
-              {alumno.legajo ? (
-                <Text style={styles.legajo}>Legajo {alumno.legajo}</Text>
-              ) : null}
-            </View>
-          ))}
+          {materia.alumnos.length === 0 ? (
+            <Text style={styles.sinAlumnos}>
+              No hay alumnos inscriptos en esta materia.
+            </Text>
+          ) : (
+            materia.alumnos.map((alumno) => (
+              <View key={alumno.id} style={styles.filaAlumno}>
+                <Text style={styles.nombreAlumno}>
+                  {nombreCompleto(alumno.nombre, alumno.apellido)}
+                </Text>
+                {alumno.legajo ? (
+                  <Text style={styles.legajo}>Legajo {alumno.legajo}</Text>
+                ) : null}
+              </View>
+            ))
+          )}
         </View>
       ) : null}
     </View>
@@ -99,6 +105,11 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     gap: theme.espaciado.sm,
     padding: theme.espaciado.md,
+  },
+  sinAlumnos: {
+    color: theme.colores.texto,
+    fontSize: 14,
+    opacity: 0.8,
   },
   filaAlumno: {
     gap: 2,

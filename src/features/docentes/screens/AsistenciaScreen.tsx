@@ -32,6 +32,13 @@ export function AsistenciaScreen() {
   const asistencia = useAsistencia(materiaSeleccionadaId, fecha);
   const claveSeleccion = `${materiaSeleccionadaId ?? ''}|${fecha}`;
   const cambios = edicion.clave === claveSeleccion ? edicion.cambios : SIN_CAMBIOS;
+  const [versionEdicion, setVersionEdicion] = useState(0);
+  const [versionGuardada, setVersionGuardada] = useState(-1);
+
+  // No permitir guardar hasta conocer la asistencia ya registrada: si la
+  // consulta falla o está cargando, se podrían sobrescribir ausencias o
+  // tardanzas existentes con el valor por defecto "presente".
+  const listadoListo = !asistencia.consulta.isLoading && !asistencia.consulta.isError;
 
   const estados = useMemo(() => {
     const base: Record<string, EstadoAsistencia> = {};
@@ -48,6 +55,7 @@ export function AsistenciaScreen() {
   }, [materia, asistencia.consulta.data, cambios]);
 
   const cambiarEstado = (alumnoId: string, estado: EstadoAsistencia) => {
+    setVersionEdicion((version) => version + 1);
     setEdicion((actual) => ({
       clave: claveSeleccion,
       cambios: {
@@ -58,18 +66,25 @@ export function AsistenciaScreen() {
   };
 
   const guardar = () => {
-    if (!materia || materia.alumnos.length === 0) {
+    if (!materia || materia.alumnos.length === 0 || !listadoListo) {
       return;
     }
 
-    asistencia.mutacion.mutate({
-      materiaId: materia.id,
-      fecha,
-      registros: materia.alumnos.map((alumno) => ({
-        alumnoId: alumno.id,
-        estado: estados[alumno.id] ?? 'presente',
-      })),
-    });
+    const version = versionEdicion;
+
+    asistencia.mutacion.mutate(
+      {
+        materiaId: materia.id,
+        fecha,
+        registros: materia.alumnos.map((alumno) => ({
+          alumnoId: alumno.id,
+          estado: estados[alumno.id] ?? 'presente',
+        })),
+      },
+      {
+        onSuccess: () => setVersionGuardada(version),
+      },
+    );
   };
 
   const resultado = asistencia.mutacion.data;
@@ -143,7 +158,10 @@ export function AsistenciaScreen() {
               />
             ) : null}
 
-            {asistencia.mutacion.isSuccess && coincideSeleccion && resultado ? (
+            {asistencia.mutacion.isSuccess &&
+            coincideSeleccion &&
+            resultado &&
+            versionEdicion === versionGuardada ? (
               <View style={styles.resultado}>
                 <Text style={styles.exito}>
                   Asistencia guardada: {resultado.registros.length} registro
@@ -168,7 +186,7 @@ export function AsistenciaScreen() {
 
             <BotonPrimario
               cargando={asistencia.mutacion.isPending}
-              deshabilitado={!materia || materia.alumnos.length === 0}
+              deshabilitado={!materia || materia.alumnos.length === 0 || !listadoListo}
               onPress={guardar}
               titulo="Guardar asistencia"
             />

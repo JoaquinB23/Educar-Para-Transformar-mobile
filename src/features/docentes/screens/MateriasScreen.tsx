@@ -1,4 +1,6 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
+import { useFocusEffect } from 'expo-router';
+import { useCallback, useRef, useState } from 'react';
+import { RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text } from 'react-native';
 
 import { EstadoCarga } from '../../../core/components/EstadoCarga';
 import { EstadoError } from '../../../core/components/EstadoError';
@@ -10,10 +12,41 @@ import { useAsignaciones } from '../hooks/useAsignaciones';
 
 export function MateriasScreen() {
   const consulta = useAsignaciones();
+  const { refetch } = consulta;
+  const [refrescando, setRefrescando] = useState(false);
+  const primeraAparicion = useRef(true);
+
+  // Al volver a la pestaña se vuelve a consultar la API para reflejar los
+  // cambios hechos desde la web. La primera aparición ya la resuelve useQuery.
+  useFocusEffect(
+    useCallback(() => {
+      if (primeraAparicion.current) {
+        primeraAparicion.current = false;
+        return;
+      }
+
+      void refetch();
+    }, [refetch]),
+  );
+
+  const onRefresh = useCallback(async () => {
+    setRefrescando(true);
+    try {
+      await refetch();
+    } finally {
+      setRefrescando(false);
+    }
+  }, [refetch]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.contenido}>
+      <ScrollView
+        contentContainerStyle={styles.contenido}
+        refreshControl={
+          <RefreshControl onRefresh={onRefresh} refreshing={refrescando} />
+        }
+        testID="materias-lista"
+      >
         <Text style={styles.titulo}>Materias</Text>
 
         {consulta.isLoading ? (
