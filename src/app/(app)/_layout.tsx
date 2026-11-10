@@ -37,6 +37,10 @@ export default function AppLayout() {
           options={{ title: 'Hijos', href: visibles.has('hijos') ? undefined : null }}
         />
         <Tabs.Screen
+          name="pagos"
+          options={{ title: 'Pagos', href: visibles.has('pagos') ? undefined : null }}
+        />
+        <Tabs.Screen
           name="mi-informacion"
           options={{
             title: 'Mi información',

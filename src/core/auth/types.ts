@@ -8,6 +8,13 @@ export const ROLES = {
 
 export type Rol = (typeof ROLES)[keyof typeof ROLES];
 
+export interface HijoPerfil {
+  id: string;
+  nombre: string;
+  apellido: string;
+  nivel?: string | null;
+}
+
 export function rolDesdeBackend(rol: string): Rol {
   switch (rol) {
     case 'familia':
@@ -28,6 +35,7 @@ export interface Perfil {
   rol: Rol;
   alumnoId?: string;
   hijoIds: string[];
+  hijos?: HijoPerfil[];
   nivel?: string | null;
   cicloLectivoActual?: number;
 }

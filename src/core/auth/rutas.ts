@@ -4,6 +4,7 @@ export const RUTAS = {
   login: '/login',
   inicio: '/',
   hijos: '/hijos',
+  pagos: '/pagos',
   miInformacion: '/mi-informacion',
   notificaciones: '/notificaciones',
   materias: '/materias',
@@ -23,6 +24,7 @@ export interface TabRol {
 export const TABS_POR_ROL: TabRol[] = [
   { name: 'index', title: 'Inicio', roles: [ROLES.PADRE, ROLES.ALUMNO, ROLES.PROFESOR] },
   { name: 'hijos', title: 'Hijos', roles: [ROLES.PADRE] },
+  { name: 'pagos', title: 'Pagos', roles: [ROLES.PADRE] },
   { name: 'mi-informacion', title: 'Mi información', roles: [ROLES.ALUMNO] },
   { name: 'notificaciones', title: 'Notificaciones', roles: [ROLES.PADRE, ROLES.ALUMNO] },
   { name: 'materias', title: 'Materias', roles: [ROLES.PROFESOR] },

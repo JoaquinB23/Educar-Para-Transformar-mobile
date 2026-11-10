@@ -2,7 +2,7 @@ import { api } from '../api/client';
 import { env } from '../config/env';
 import { nombreCompleto } from '../utils/nombre';
 
-import { rolDesdeBackend, ROLES, type Perfil, type Rol } from './types';
+import { rolDesdeBackend, ROLES, type HijoPerfil, type Perfil, type Rol } from './types';
 
 function esRol(value: string): value is Rol {
   return Object.values(ROLES).some((rol) => rol === value);
@@ -40,6 +40,7 @@ interface PerfilBackend {
   apellido?: string | null;
   hijoPrimariaId?: string | null;
   hijoSecundariaId?: string | null;
+  hijos?: HijoPerfil[];
   alumnoId?: string | null;
   cicloLectivoActual: number;
 }
@@ -62,9 +63,12 @@ export async function obtenerPerfil(): Promise<Perfil> {
     email: backendPerfil.email,
     rol: rolDesdeBackend(backendPerfil.rol),
     alumnoId: backendPerfil.alumnoId || undefined,
-    hijoIds: [backendPerfil.hijoPrimariaId, backendPerfil.hijoSecundariaId].filter(
-      (id): id is string => typeof id === 'string' && id.length > 0,
-    ),
+    hijoIds:
+      backendPerfil.hijos?.map((hijo) => hijo.id) ??
+      [backendPerfil.hijoPrimariaId, backendPerfil.hijoSecundariaId].filter(
+        (id): id is string => typeof id === 'string' && id.length > 0,
+      ),
+    hijos: backendPerfil.hijos,
     nivel: backendPerfil.nivel,
     cicloLectivoActual: backendPerfil.cicloLectivoActual,
   };
